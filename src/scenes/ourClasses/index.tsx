@@ -87,7 +87,7 @@ const OurClasses = ({ setSelectedPage }: Props) => {
           </div>
         </motion.div>
         <div className="mt-10 h-[353px]">
-          <ul className="flex overflow-x-auto">
+          <ul className="flex ">
             {classes
               .concat(classes)
               .slice(currentIndex, currentIndex + 3)
