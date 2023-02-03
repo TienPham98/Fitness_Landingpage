@@ -8,6 +8,7 @@ import image6 from "@/assets/image6.png";
 import { motion } from "framer-motion";
 import HText from "@/shared/HText";
 import Class from "./Class";
+import { useState, useEffect } from "react";
 
 const classes: Array<ClassType> = [
   {
@@ -49,6 +50,16 @@ type Props = {
 };
 
 const OurClasses = ({ setSelectedPage }: Props) => {
+  const [currentIndex, setCurrentIndex] = useState(0);
+
+  useEffect(() => {
+    const intervalId = setInterval(() => {
+      setCurrentIndex((currentIndex + 1) % classes.length);
+    }, 2000);
+
+    return () => clearInterval(intervalId);
+  }, [classes.length, currentIndex]);
+
   return (
     <section id="ourclasses" className="w-full bg-primary-100 py-40">
       <motion.div
@@ -59,7 +70,7 @@ const OurClasses = ({ setSelectedPage }: Props) => {
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true, amount: 0.5 }}
-          transition={{ duration: 0.5 }}
+          transition={{ duration: 2, ease: "easeInOut" }}
           variants={{
             hidden: { opacity: 0, x: -50 },
             visible: { opacity: 1, x: 0 },
@@ -75,16 +86,20 @@ const OurClasses = ({ setSelectedPage }: Props) => {
             </p>
           </div>
         </motion.div>
-        <div className="mt-10 h-[353px] w-full overflow-x-auto overflow-y-hidden">
-          <ul className="w-[2800px] whitespace-nowrap">
-            {classes.map((item: ClassType, index) => (
-              <Class
-                key={`${item.name}-${index}`}
-                name={item.name}
-                description={item.description}
-                image={item.image}
-              />
-            ))}
+        <div className="mt-10 h-[353px]">
+          <ul className="flex overflow-x-auto">
+            {classes
+              .concat(classes)
+              .slice(currentIndex, currentIndex + 3)
+              .map((classData, index) => (
+                <li key={classData.name} className="mr-10">
+                  <Class
+                    name={classData.name}
+                    description={classData.description}
+                    image={classData.image}
+                  />
+                </li>
+              ))}
           </ul>
         </div>
       </motion.div>
